@@ -7,6 +7,8 @@ module.exports = {
   plugins: [
     '@snowpack/plugin-react-refresh',
     '@snowpack/plugin-dotenv',
+    'snowpack-plugin-svgr',
+    '@snowpack/plugin-webpack',
     ['@snowpack/plugin-run-script', { cmd: 'nodemon ./api/index.js'}],
   ],
   install: [
