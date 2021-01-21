@@ -59,31 +59,37 @@ function NewNote(){
     alert('Ajouter une nouvelle note');
 }
 
-function Notes() {
-    return (
-        <StyledNotesContainer>
-            <Toolbar />
-            <StyledContainer>
-                <StyledLeftContainer>
-                    <StyledNewNote onClick={NewNote}>
-                        + Nouvelle note
-                    </StyledNewNote>
-                    <StyledNote>
-                        Note 1
-                    </StyledNote>
-                    <StyledNote>
-                        Note sur plein de choses de math
-                    </StyledNote>
-                    <StyledNote>
-                        Note 3
-                    </StyledNote>
-                </StyledLeftContainer>
-                <StyledDrawArea>
 
-                </StyledDrawArea>
-            </StyledContainer>
-        </StyledNotesContainer>
-    );
+fetch("http://localhost:8000/notes", {method: "GET"})
+    .then(response => response.json())
+    .then(data => { notes = data } );
+
+export default class Notes extends React.Component { 
+    state = {
+        notes: []
+    };
+
+    componentDidMount() {
+        fetch("http://localhost:8000/notes", {method: "GET"})
+        .then(response => response.json())
+        .then(data => this.setState({notes: data}) );
+    }
+
+    render() {
+        return (
+            <StyledNotesContainer>
+                <Toolbar />
+                <StyledContainer>
+                    <StyledLeftContainer>
+                        <StyledNewNote onClick={NewNote}>
+                            + Nouvelle note
+                        </StyledNewNote>
+                        { this.state.notes.map(note => <StyledNote>{note.name}</StyledNote>) }
+                    </StyledLeftContainer>
+                    <StyledDrawArea>
+                    </StyledDrawArea>
+                </StyledContainer>
+            </StyledNotesContainer>
+        );
+    }
 }
-
-export default Notes;
