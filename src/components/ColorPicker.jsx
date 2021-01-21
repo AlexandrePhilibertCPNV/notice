@@ -36,7 +36,7 @@ function ColorPicker() {
             <button>A</button>
             <button><ExpandSVG /></button>
             <StyledColorContainer>
-                {colors.map(color => <StyledColoredButton style={{ backgroundColor: color }} />)}
+                {colors.map((color, i) => <StyledColoredButton key={i} style={{ backgroundColor: color }} />)}
             </StyledColorContainer>
         </div>
     );
