@@ -34,7 +34,14 @@ function Toolbar({
     onFontBoldChange,
     onFontItalicChange,
     onFontUnderlineChange,
-    onFontColorChange }) {
+    onFontColorChange,
+    fontFamily,
+    fontSize,
+    fontBold,
+    fontItalic,
+    fontUnderline,
+    FontColor
+}) {
 
     return (
         <div>
@@ -43,7 +50,7 @@ function Toolbar({
                 <select name="font" id="" onChange={evt => onFontChange(evt.target.value)}>
                     {fonts.map((font, i) => <option key={i} name={font}>{font}</option>)}
                 </select>
-                <input type="number" onBlur={onFontSizeChange} onSubmit={onFontSizeChange}/>
+                <input defaultValue={fontSize} type="number" onBlur={evt => onFontSizeChange(evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
                 <button onClick={evt => onFontBoldChange()}>B</button>
                 <button onClick={evt => onFontItalicChange()}>I</button>
                 <button onClick={evt => onFontUnderlineChange()}>U</button>

@@ -65,7 +65,7 @@ function Notes() {
 
     function createTextBloc(evt) {
         const { x, y } = drawArea.current.getBoundingClientRect();
-        
+
         setNote({
             ...note, parts: [
                 ...note.parts,
@@ -102,7 +102,14 @@ function Notes() {
 
     return (
         <StyledNotesContainer>
-            <Toolbar onFontChange={setFontFamily} onFontSizeChange={setFontSize}
+            <Toolbar
+                fontFamily={fontFamily}
+                fontSize={fontSize}
+                fontBold={fontBold}
+                fontItalic={fontItalic}
+                fontUnderline={fontUnderline}
+                fontColor={fontColor}
+                onFontChange={setFontFamily} onFontSizeChange={setFontSize}
                 onFontBoldChange={setFontBold} onFontItalicChange={setFontItalic}
                 onFontUnderlineChange={setFontUnderline} onFontColorChange={setFontColor} />
             <StyledContainer>

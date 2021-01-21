@@ -85,7 +85,7 @@ function TextBloc(props) {
                 style={{
                     fontFamily: part.meta.fontFamily,
                     color: part.meta.fontColor, 
-                    fontSize: part.meta.fontSize, 
+                    fontSize: part.meta.fontSize + 'px', 
                     fontWeight: part.meta.fontWeight, 
                     fontStyle: part.meta.fontItalic ? 'italic' : 'normal',
                     textDecoration: part.meta.fontUnderline ? 'underline' : 'none'
