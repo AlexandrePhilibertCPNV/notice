@@ -58,10 +58,6 @@ const StyledNote = styled(BaseNote)`
     }
 `;
 
-fetch("http://localhost:8000/notes", {method: "GET"})
-    .then(response => response.json())
-    .then(data => { notes = data } );
-
 export default class Notes extends React.Component { 
     state = {
         notes: []
