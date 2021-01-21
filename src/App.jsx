@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Note from './pages/Note';
+import Notes from './pages/Notes';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" component={Login}/> 
             <Route path="/signup" component={Signup}/> 
             <Route path="/note" component={Note}/> 
+            <Route path="/notes" component={Notes}/>
           </Switch>
        </Router>
   );
