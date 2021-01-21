@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledLeftContainer = styled.div`
-    padding: 2em 1em;
+    padding: 1em 0;
     width: 200px;
     height: 100%;
     border-right: 1px solid #e4e4e4;
@@ -35,15 +35,29 @@ const StyledDrawArea = styled.div`
     cursor: text;
 `;
 
-const StyledNewNote = styled.div`
+const BaseNote = styled.a`
     padding: 1em;
     border-bottom: 1px solid #e4e4e4;
+
+    &:hover{
+        background-color: WhiteSmoke;
+        cursor: pointer;
+    }
 `;
 
-const StyledNote = styled.div`
-    padding: 1em;
-    border-bottom: 1px solid #e4e4e4;
+const StyledNewNote = styled(BaseNote)`
+
 `;
+
+const StyledNote = styled(BaseNote)`
+    &.active{
+
+    }
+`;
+
+function NewNote(){
+    alert('Ajouter une nouvelle note');
+}
 
 function Notes() {
     return (
@@ -51,7 +65,7 @@ function Notes() {
             <Toolbar />
             <StyledContainer>
                 <StyledLeftContainer>
-                    <StyledNewNote>
+                    <StyledNewNote onClick={NewNote}>
                         + Nouvelle note
                     </StyledNewNote>
                     <StyledNote>
