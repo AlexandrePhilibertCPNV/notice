@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import TextBloc from '../components/TextBloc';
 import Toolbar from '../components/Toolbar';
 
 const StyledNotesContainer = styled.div`
@@ -28,10 +29,11 @@ const StyledLeftContainer = styled.div`
 `;
 
 const StyledDrawArea = styled.div`
-    padding: 5em;
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: #f6f5f4;
+    user-select: none;
     cursor: text;
 `;
 
@@ -46,9 +48,63 @@ const StyledNote = styled.div`
 `;
 
 function Notes() {
+
+    const drawArea = useRef(null);
+
+    const [note, setNote] = useState({
+        name: 'Ma première note',
+        parts: [],
+    });
+
+    const [fontFamily, setFontFamily] = useState('Arial');
+    const [fontSize, setFontSize] = useState(12);
+    const [fontBold, setFontBold] = useState(false);
+    const [fontItalic, setFontItalic] = useState(false);
+    const [fontUnderline, setFontUnderline] = useState(false);
+    const [fontColor, setFontColor] = useState('#000');
+
+    function createTextBloc(evt) {
+        const { x, y } = drawArea.current.getBoundingClientRect();
+        
+        setNote({
+            ...note, parts: [
+                ...note.parts,
+                {
+                    type: 'text',
+                    content: '',
+                    position: {
+                        x: evt.clientX - x,
+                        y: evt.clientY - y
+                    },
+                    meta: {
+                        fontFamily: fontFamily,
+                        fontSize: fontSize,
+                        bold: fontBold,
+                        italic: fontItalic,
+                        underline: fontUnderline,
+                        color: fontColor
+                    }
+                }
+            ]
+        });
+    }
+
+    function updateTextBloc(textBloc) {
+
+    }
+
+    function deleteTextBloc(textBloc) {
+        setNote({
+            ...note,
+            parts: note.parts.filter(part => part != textBloc),
+        });
+    }
+
     return (
         <StyledNotesContainer>
-            <Toolbar />
+            <Toolbar onFontChange={setFontFamily} onFontSizeChange={setFontSize}
+                onFontBoldChange={setFontBold} onFontItalicChange={setFontItalic}
+                onFontUnderlineChange={setFontUnderline} onFontColorChange={setFontColor} />
             <StyledContainer>
                 <StyledLeftContainer>
                     <StyledNewNote>
@@ -64,8 +120,11 @@ function Notes() {
                         Note 3
                     </StyledNote>
                 </StyledLeftContainer>
-                <StyledDrawArea>
-
+                <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
+                    {note.parts.map((part, i) => <TextBloc key={i}
+                        handleUpdate={updateTextBloc}
+                        handleDelete={deleteTextBloc} part={part}
+                        container={drawArea} />)}
                 </StyledDrawArea>
             </StyledContainer>
         </StyledNotesContainer>

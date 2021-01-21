@@ -23,79 +23,30 @@ const StyledToolBar = styled.div`
 
 const fonts = [
     'Arial',
-    'Arial Black',
-    'Bahnschrift',
-    'Calibri',
-    'Cambria',
-    'Cambria Math',
-    'Candara',
-    'Comic Sans MS',
-    'Consolas',
-    'Constantia',
-    'Corbel',
-    'Courier New',
-    'Ebrima',
-    'Franklin Gothic Medium',
-    'Gabriola',
-    'Gadugi',
-    'Georgia',
-    'HoloLens MDL2 Assets',
-    'Impact',
-    'Ink Free',
-    'Javanese Text',
-    'Leelawadee UI',
-    'Lucida Console',
-    'Lucida Sans Unicode',
-    'Malgun Gothic',
-    'Marlett',
-    'Microsoft Himalaya',
-    'Microsoft JhengHei',
-    'Microsoft New Tai Lue',
-    'Microsoft PhagsPa',
-    'Microsoft Sans Serif',
-    'Microsoft Tai Le',
-    'Microsoft YaHei',
-    'Microsoft Yi Baiti',
-    'MingLiU-ExtB',
-    'Mongolian Baiti',
-    'MS Gothic',
-    'MV Boli',
-    'Myanmar Text',
-    'Nirmala UI',
-    'Palatino Linotype',
-    'Segoe MDL2 Assets',
-    'Segoe Print',
-    'Segoe Script',
-    'Segoe UI',
-    'Segoe UI Historic',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    'SimSun',
-    'Sitka',
-    'Sylfaen',
-    'Symbol',
-    'Tahoma',
-    'Times New Roman',
-    'Trebuchet MS',
-    'Verdana',
-    'Webdings',
-    'Wingdings',
-    'Yu Gothic',
+    'mono',
+    'Roboto',
+    'Century Ghotic'
 ];
 
-function Toolbar() {
+function Toolbar({
+    onFontChange,
+    onFontSizeChange,
+    onFontBoldChange,
+    onFontItalicChange,
+    onFontUnderlineChange,
+    onFontColorChange }) {
 
     return (
         <div>
             <StyledTopBar><h1>Notice</h1></StyledTopBar>
             <StyledToolBar>
-                <select name="font" id="">
-                    {fonts.map(font => <option name={font}>{font}</option>)}
+                <select name="font" id="" onChange={evt => onFontChange(evt.target.value)}>
+                    {fonts.map((font, i) => <option key={i} name={font}>{font}</option>)}
                 </select>
-                <input type="number"/>
-                <button>B</button>
-                <button>I</button>
-                <button>U</button>
+                <input type="number" onBlur={onFontSizeChange} onSubmit={onFontSizeChange}/>
+                <button onClick={evt => onFontBoldChange()}>B</button>
+                <button onClick={evt => onFontItalicChange()}>I</button>
+                <button onClick={evt => onFontUnderlineChange()}>U</button>
                 <ColorPicker />
             </StyledToolBar>
         </div>
