@@ -48,8 +48,14 @@ const BaseNote = styled(Link)`
     }
 `;
 
-const StyledNewNote = styled(BaseNote)`
+const StyledNewNoteButton = styled(BaseNote)`
 
+`;
+
+const StyledNewNoteNameInput = styled(BaseNote)`
+    visibility: collapse;
+    background-color: rgba(16, 165, 153, 0.05);
+    border: 5px solid white;
 `;
 
 const StyledNote = styled(BaseNote)`
@@ -59,14 +65,56 @@ const StyledNote = styled(BaseNote)`
 `;
 
 export default class Notes extends React.Component { 
-    state = {
-        notes: []
-    };
+    constructor (props){
+        super(props);
+        
+        this.state = {
+            notes: []
+        };
+        this.newNoteNameInputRef = React.createRef();
+    }
+
+    newNote(){
+        this.newNoteNameInputRef.current.text = "";
+        this.newNoteNameInputRef.current.style.visibility = "visible";
+        this.newNoteNameInputRef.current.focus();
+    }
+
+    getNotes() {
+        fetch("http://localhost:8000/notes", {method: "GET"})
+            .then(response => response.json())
+            .then(data => { console.log(data); this.setState({notes: data}) } );
+    }
 
     componentDidMount() {
-        fetch("http://localhost:8000/notes", {method: "GET"})
-        .then(response => response.json())
-        .then(data => this.setState({notes: data}) );
+        this.getNotes();
+    }
+
+    keyPress(event) {
+        if(event.charCode == 13) {
+            event.preventDefault();
+            
+            let elem = this.newNoteNameInputRef.current;
+            if(elem.text.length === 0)
+                return;
+            
+            fetch("http://localhost:8000/notes", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'name': elem.text,
+                    'children': []
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.getNotes();
+                this.props.history.push("/notes/" + data["_id"]);
+                elem.style.visibility = "collapse";
+            });
+        }
     }
 
     render() {
@@ -75,9 +123,13 @@ export default class Notes extends React.Component {
                 <Toolbar />
                 <StyledContainer>
                     <StyledLeftContainer>
-                        <StyledNewNote as={Link} to="/">
+                        <StyledNewNoteButton onClick={ this.newNote.bind(this) }>
                             + Nouvelle note
-                        </StyledNewNote>
+                        </StyledNewNoteButton>
+                        <StyledNewNoteNameInput ref={this.newNoteNameInputRef}
+                            contentEditable="true"
+                            onKeyPress={this.keyPress.bind(this)}
+                        ></StyledNewNoteNameInput>
                         { this.state.notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>{note.name}</StyledNote>) }
                     </StyledLeftContainer>
                     <StyledDrawArea>
