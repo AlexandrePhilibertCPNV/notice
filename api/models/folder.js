@@ -8,11 +8,7 @@ const folderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    childs: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Folder'
-        },
+    notes: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Note'
