@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Toolbar from '../components/Toolbar';
@@ -35,9 +36,11 @@ const StyledDrawArea = styled.div`
     cursor: text;
 `;
 
-const BaseNote = styled.a`
+const BaseNote = styled(Link)`
     padding: 1em;
     border-bottom: 1px solid #e4e4e4;
+    color: black;
+    text-decoration: none;
 
     &:hover{
         background-color: WhiteSmoke;
@@ -51,13 +54,9 @@ const StyledNewNote = styled(BaseNote)`
 
 const StyledNote = styled(BaseNote)`
     &.active{
-
+        background-color: rgba(16, 165, 153, 0.3);
     }
 `;
-
-function NewNote(){
-    alert('Ajouter une nouvelle note');
-}
 
 function Notes() {
     return (
@@ -65,16 +64,16 @@ function Notes() {
             <Toolbar />
             <StyledContainer>
                 <StyledLeftContainer>
-                    <StyledNewNote onClick={NewNote}>
+                    <StyledNewNote as={Link} to="/">
                         + Nouvelle note
                     </StyledNewNote>
-                    <StyledNote>
+                    <StyledNote as={NavLink} to="/notes/1">
                         Note 1
                     </StyledNote>
-                    <StyledNote>
+                    <StyledNote as={NavLink} to="/notes/2">
                         Note sur plein de choses de math
                     </StyledNote>
-                    <StyledNote>
+                    <StyledNote as={NavLink} to="/notes/3">
                         Note 3
                     </StyledNote>
                 </StyledLeftContainer>
