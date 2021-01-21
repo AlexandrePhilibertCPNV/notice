@@ -17,7 +17,7 @@ const StyledTopBar = styled.div`
 `;
 
 const StyledToolBar = styled.div`
-    background-color: #f5f5f5;
+    background-color: #fcfcfc;
     border-bottom: 1px solid #e4e4e4;
 `;
 

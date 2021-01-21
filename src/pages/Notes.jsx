@@ -1,41 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import LogoSVG from '../assets/logo.svg';
+import Toolbar from '../components/Toolbar';
 
-const StyledHeader = styled.header`
-    padding: .5em;
-    border-bottom: 1px solid #e4e4e4;
-`;
-
-const StyledLogo = styled(LogoSVG)`
-    width: 3em;
-    height: 3em;
+const StyledNotesContainer = styled.div`
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
 `;
 
 const StyledContainer = styled.div`
     display: flex;
-    height: auto;
-    flex-flow: row no-wrap;
+    flex-flow: row nowrap;
+    height: 100%;
 
     & > * {
         display: flex;
         flex-flow: column wrap;
-        /* flex: 1 1 50%; */
-
     }
 `;
 
 const StyledLeftContainer = styled.div`
     padding: 2em 1em;
     width: 200px;
-    min-height: 100%;
+    height: 100%;
     border-right: 1px solid #e4e4e4;
 `;
 
-const StyledRightContainer = styled.div`
+const StyledDrawArea = styled.div`
     padding: 5em;
-    width: auto;
+    width: 100%;
+    height: 100%;
+    background-color: #f6f5f4;
+    cursor: text;
 `;
 
 const StyledNewNote = styled.div`
@@ -50,10 +47,8 @@ const StyledNote = styled.div`
 
 function Notes() {
     return (
-        <>
-            <StyledHeader>
-                <StyledLogo />
-            </StyledHeader>
+        <StyledNotesContainer>
+            <Toolbar />
             <StyledContainer>
                 <StyledLeftContainer>
                     <StyledNewNote>
@@ -69,11 +64,11 @@ function Notes() {
                         Note 3
                     </StyledNote>
                 </StyledLeftContainer>
-                <StyledRightContainer>
-                    Mettre le document ouvert ici
-                </StyledRightContainer>
+                <StyledDrawArea>
+
+                </StyledDrawArea>
             </StyledContainer>
-        </>
+        </StyledNotesContainer>
     );
 }
 
