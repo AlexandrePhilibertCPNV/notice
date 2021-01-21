@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Toolbar from '../components/Toolbar';
@@ -35,9 +36,11 @@ const StyledDrawArea = styled.div`
     cursor: text;
 `;
 
-const BaseNote = styled.a`
+const BaseNote = styled(Link)`
     padding: 1em;
     border-bottom: 1px solid #e4e4e4;
+    color: black;
+    text-decoration: none;
 
     &:hover{
         background-color: WhiteSmoke;
@@ -51,14 +54,9 @@ const StyledNewNote = styled(BaseNote)`
 
 const StyledNote = styled(BaseNote)`
     &.active{
-
+        background-color: rgba(16, 165, 153, 0.3);
     }
 `;
-
-function NewNote(){
-    alert('Ajouter une nouvelle note');
-}
-
 
 fetch("http://localhost:8000/notes", {method: "GET"})
     .then(response => response.json())
@@ -81,10 +79,10 @@ export default class Notes extends React.Component {
                 <Toolbar />
                 <StyledContainer>
                     <StyledLeftContainer>
-                        <StyledNewNote onClick={NewNote}>
+                        <StyledNewNote as={Link} to="/">
                             + Nouvelle note
                         </StyledNewNote>
-                        { this.state.notes.map(note => <StyledNote>{note.name}</StyledNote>) }
+                        { this.state.notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>{note.name}</StyledNote>) }
                     </StyledLeftContainer>
                     <StyledDrawArea>
                     </StyledDrawArea>
