@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import TextBloc from '../components/TextBloc';
@@ -22,7 +23,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledLeftContainer = styled.div`
-    padding: 2em 1em;
+    padding: 1em 0;
     width: 200px;
     height: 100%;
     border-right: 1px solid #e4e4e4;
@@ -37,24 +38,46 @@ const StyledDrawArea = styled.div`
     cursor: text;
 `;
 
-const StyledNewNote = styled.div`
+const BaseNote = styled(Link)`
     padding: 1em;
     border-bottom: 1px solid #e4e4e4;
+    color: black;
+    text-decoration: none;
+
+    &:hover{
+        background-color: WhiteSmoke;
+        cursor: pointer;
+    }
 `;
 
-const StyledNote = styled.div`
-    padding: 1em;
-    border-bottom: 1px solid #e4e4e4;
+const StyledNewNoteButton = styled(BaseNote)`
+
 `;
 
-function Notes() {
+const StyledNewNoteNameInput = styled(BaseNote)`
+    visibility: collapse;
+    background-color: rgba(16, 165, 153, 0.05);
+    border: 5px solid white;
+`;
+
+const StyledNote = styled(BaseNote)`
+    &.active{
+        background-color: rgba(16, 165, 153, 0.3);
+    }
+`;
+
+function Notes(props) {
 
     const drawArea = useRef(null);
+    const newNoteNameInputRef = useRef(null);
+
 
     const [note, setNote] = useState({
         name: 'Ma première note',
         parts: [],
     });
+
+    const [notes, setNotes] = useState([]);
 
     const [fontFamily, setFontFamily] = useState('Arial');
     const [fontSize, setFontSize] = useState(14);
@@ -63,6 +86,10 @@ function Notes() {
     const [fontUnderline, setFontUnderline] = useState(false);
     const [fontColor, setFontColor] = useState('#000');
     const [selectedPart, setSelectedPart] = useState(false);
+
+    useEffect(() => {
+        getNotes();
+    });
 
     function createTextBloc(evt) {
         const { x, y } = drawArea.current.getBoundingClientRect();
@@ -128,6 +155,45 @@ function Notes() {
         }
     }
 
+    function newNoteButtonPressed() {
+        newNoteNameInputRef.current.text = "";
+        newNoteNameInputRef.current.style.visibility = "visible";
+        newNoteNameInputRef.current.focus();
+    }
+
+    function getNotes() {
+        fetch("http://localhost:8000/notes", {method: "GET"})
+            .then(response => response.json())
+            .then(data => { setNotes(data) } );
+    }
+
+    function newNoteInputKeyPress(event) {
+        if(event.charCode == 13) {
+            event.preventDefault();
+            
+            let elem = newNoteNameInputRef.current;
+            if(elem.text.length === 0)
+                return;
+            
+            fetch("http://localhost:8000/notes", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'name': elem.text,
+                    'children': []
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                getNotes();
+                props.history.push("/notes/" + data["_id"]);
+                elem.style.visibility = "collapse";
+            });
+        }
+    }
+
     return (
         <StyledNotesContainer>
             <Toolbar
@@ -140,19 +206,15 @@ function Notes() {
                 onSettingChange={handleSettingChange}
                 noteName={note.name} />
             <StyledContainer>
-                <StyledLeftContainer>
-                    <StyledNewNote>
-                        + Nouvelle note
-                    </StyledNewNote>
-                    <StyledNote>
-                        Note 1
-                    </StyledNote>
-                    <StyledNote>
-                        Note sur plein de choses de math
-                    </StyledNote>
-                    <StyledNote>
-                        Note 3
-                    </StyledNote>
+                <StyledLeftContainer>   
+                        <StyledNewNoteButton onClick={ newNoteButtonPressed }>
+                            + Nouvelle note
+                        </StyledNewNoteButton>
+                        <StyledNewNoteNameInput ref={ newNoteNameInputRef }
+                            contentEditable="true"
+                            onKeyPress={ newNoteInputKeyPress }
+                        ></StyledNewNoteNameInput>
+                        { notes.map(n => <StyledNote as={ NavLink } to={"/notes/" + n._id}>{n.name}</StyledNote>) }
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
                     {note.parts.map((part, i) => <TextBloc key={i}
