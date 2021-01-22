@@ -133,10 +133,10 @@ function Notes(props) {
         newNoteNameInputRef.current.focus();
     }
 
-    function getNotes() {
-        fetch("http://localhost:8000/notes", {method: "GET"})
-            .then(response => response.json())
-            .then(data => { setNotes(data) } );
+    async function getNotes() {
+        let response = await fetch("http://localhost:8000/notes", {method: "GET"});
+        let json = await response.json();
+        setNotes(json);
     }
 
     function newNoteInputKeyPress(event) {
