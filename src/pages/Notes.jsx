@@ -147,10 +147,10 @@ function Notes(props) {
                 setFontItalic(value);
                 break;
             case 'fontUnderline':
-                setfontUnderline(value);
+                setFontUnderline(value);
                 break;
             case 'fontColor':
-                setfontColor(value);
+                setFontColor(value);
                 break;
         }
     }
