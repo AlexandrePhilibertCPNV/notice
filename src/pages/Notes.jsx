@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import TextBloc from '../components/TextBloc';
@@ -78,6 +78,7 @@ function Notes(props) {
     });
 
     const [notes, setNotes] = useState([]);
+    const { id: noteId } = useParams();
 
     const [fontFamily, setFontFamily] = useState('Arial');
     const [fontSize, setFontSize] = useState(14);
@@ -162,19 +163,19 @@ function Notes(props) {
     }
 
     function getNotes() {
-        fetch("http://localhost:8000/notes", {method: "GET"})
+        fetch("http://localhost:8000/notes", { method: "GET" })
             .then(response => response.json())
-            .then(data => { setNotes(data) } );
+            .then(data => { setNotes(data) });
     }
 
     function newNoteInputKeyPress(event) {
-        if(event.charCode == 13) {
+        if (event.charCode == 13) {
             event.preventDefault();
-            
+
             let elem = newNoteNameInputRef.current;
-            if(elem.text.length === 0)
+            if (elem.text.length === 0)
                 return;
-            
+
             fetch("http://localhost:8000/notes", {
                 method: "POST",
                 headers: {
@@ -185,12 +186,12 @@ function Notes(props) {
                     'children': []
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                getNotes();
-                props.history.push("/notes/" + data["_id"]);
-                elem.style.visibility = "collapse";
-            });
+                .then(response => response.json())
+                .then(data => {
+                    getNotes();
+                    props.history.push("/notes/" + data["_id"]);
+                    elem.style.visibility = "collapse";
+                });
         }
     }
 
@@ -206,15 +207,17 @@ function Notes(props) {
                 onSettingChange={handleSettingChange}
                 noteName={note.name} />
             <StyledContainer>
-                <StyledLeftContainer>   
-                        <StyledNewNoteButton onClick={ newNoteButtonPressed }>
-                            + Nouvelle note
+                <StyledLeftContainer>
+                    <StyledNewNoteButton onClick={newNoteButtonPressed}>
+                        + Nouvelle note
                         </StyledNewNoteButton>
-                        <StyledNewNoteNameInput ref={ newNoteNameInputRef }
-                            contentEditable="true"
-                            onKeyPress={ newNoteInputKeyPress }
-                        ></StyledNewNoteNameInput>
-                        { notes.map(n => <StyledNote as={ NavLink } to={"/notes/" + n._id}>{n.name}</StyledNote>) }
+                    <StyledNewNoteNameInput ref={newNoteNameInputRef}
+                        contentEditable="true"
+                        onKeyPress={newNoteInputKeyPress}
+                    ></StyledNewNoteNameInput>
+                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>
+                        {note.name}
+                    </StyledNote>)}
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
                     {note.parts.map((part, i) => <TextBloc key={i}

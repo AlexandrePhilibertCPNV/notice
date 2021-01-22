@@ -22,6 +22,7 @@ function App() {
             <Route path="/login" component={Login}/> 
             <Route path="/signup" component={Signup}/> 
             <Route path="/notes" component={Notes}/>
+            <Route path="/notes/:id" component={Notes}/>
             <Route path="/logout" component={Logout}/>
           </Switch>
        </Router>
