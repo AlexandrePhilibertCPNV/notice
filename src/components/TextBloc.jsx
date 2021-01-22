@@ -65,8 +65,8 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
     }
 
     return (
-        <StyledTextBloc ref={ref} isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
-            <StyledHeader onMouseUp={handleMouseUp}>
+        <StyledTextBloc isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
+            <StyledHeader ref={ref} onMouseUp={handleMouseUp}>
                 <StyledDeleteButton onClick={evt => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
             <StyledTextContent onFocus={handleFocus} onBlur={handleBlur} ref={textContent}
