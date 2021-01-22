@@ -4,9 +4,23 @@ const noteSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    childs: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'TextBlock'
+    parts: [{
+        contentType: String,
+        content: mongoose.Mixed,
+        position: {
+            type: {
+                x: Number,
+                y: Number
+            }
+        },
+        meta: {
+            fontFamily: String,
+            fontSize: String,
+            bold: String,
+            italic: String,
+            underline: String,
+            color: String
+        }
     }]
 });
 
