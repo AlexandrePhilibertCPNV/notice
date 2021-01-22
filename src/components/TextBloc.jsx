@@ -62,6 +62,42 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
             handleDelete(part);
             return;
         }
+
+        if(textContent.current.innerText == part.content) { // Only update if content changed
+            return;
+        }
+
+        savePart();
+    }
+
+    async function savePart() {
+        await fetch("http://localhost:8000/notes/" + props.noteId + "/pushPart", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "_id": part._id,
+                "type": "text",
+                "content": textContent.current.innerText,
+                "position": {
+                    "x": part.position.x,
+                    "y": part.position.y
+                },
+                "meta": {
+                    fontFamily: part.meta.fontFamily,
+                    fontColor: part.meta.fontColor,
+                    fontSize: part.meta.fontSize,
+                    fontBold: part.meta.fontBold,
+                    fontItalic: part.meta.fontItalic,
+                    fontUnderline: part.meta.fontUnderline
+                }
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                setPart(data[0]);
+            });
     }
 
     return (

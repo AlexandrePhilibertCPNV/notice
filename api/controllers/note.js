@@ -15,6 +15,31 @@ class NoteController {
 
         res.json(note);
     }
+
+    static async pushPart(req, res) {
+        let note = await Note.findOne({_id: req.params.id});
+
+        // If the part is already in array, delete it to replace it with the new data
+        if(req.body._id){
+            await note.parts.pull({_id: req.body._id});
+        }
+        
+        let part = await note.parts.push(req.body);
+        
+        await note.save();
+
+        // Find the new part as an object
+        let pObj = await Note.findOne({_id: req.params.id}).slice('parts', part - 1, 1);
+        res.json(pObj.parts);
+    }
+
+    static async pullPart(req, res) {
+        let note = await Note.findOne({_id: req.params.id});
+        let r = await note.parts.pull({_id: req.params.partId});
+        await note.save();
+
+        res.json(r);
+    }
     
 }
 

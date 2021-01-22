@@ -88,11 +88,13 @@ function Notes(props) {
     const [fontColor, setFontColor] = useState('#000');
     const [selectedPart, setSelectedPart] = useState(false);
 
+    // on noteId change
     useEffect(() => {
         getNotes();
-    });
+        switchToNote(noteId);
+    }, [noteId]);
 
-    function handleClick(evt) {
+    function createTextBloc(evt) {
         // We do not create a new TextBloc if we had another one selected before
         // clicking in the DrawArea
         if (selectedPart) {
@@ -168,14 +170,26 @@ function Notes(props) {
         newNoteNameInputRef.current.style.visibility = "visible";
         newNoteNameInputRef.current.focus();
     }
-
-    function getNotes() {
-        fetch("http://localhost:8000/notes", { method: "GET" })
-            .then(response => response.json())
-            .then(data => { setNotes(data) });
+    
+    async function getNotes() {
+        let response = await fetch("http://localhost:8000/notes", {method: "GET"});
+        let json = await response.json();
+        setNotes(json);
     }
 
-    function newNoteInputKeyPress(event) {
+    async function switchToNote(nid) {
+        if(!nid)
+            return;
+
+        let response = await fetch("http://localhost:8000/notes/" + nid, {method: "GET"});
+        let json = await response.json();
+
+        console.log(json);
+
+        setNote(json);
+    }
+
+    async function newNoteInputKeyPress(event) {
         if (event.charCode == 13) {
             event.preventDefault();
 
@@ -183,7 +197,7 @@ function Notes(props) {
             if (elem.text.length === 0)
                 return;
 
-            fetch("http://localhost:8000/notes", {
+            await fetch("http://localhost:8000/notes", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -226,13 +240,14 @@ function Notes(props) {
                         {note.name}
                     </StyledNote>)}
                 </StyledLeftContainer>
-                <StyledDrawArea ref={drawArea} onClick={handleClick}>
-                    {note.parts.map((part, i) => <TextBloc key={i}
+                <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
+                    {note.parts.map((part) => <TextBloc key={part._id}
                         handleUpdate={updateTextBloc}
                         handleDelete={deleteTextBloc}
                         handleSelect={handleSelect}
                         isSelected={selectedPart == part}
                         part={part}
+                        noteId={noteId}
                         container={drawArea} />)}
                 </StyledDrawArea>
             </StyledContainer>

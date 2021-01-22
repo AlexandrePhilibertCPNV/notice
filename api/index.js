@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/users', require('./routes/user'));
 app.use('/sessions', require('./routes/session'));
 app.use('/notes', require('./routes/note'));
-app.use('/textBlocks', require('./routes/textBlock'));
 
 app.use((err, req, res, next) => {
     // Basic error handling, we could have multiple error types we could handle here
