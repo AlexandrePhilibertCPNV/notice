@@ -73,7 +73,7 @@ function Toolbar({
                 <input defaultValue={fontSize} type="number" onBlur={evt => onSettingChange('fontSize', evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
                 <ToggleButton style={{ fontWeight: 'bold' }} defaultValue={fontBold}
                     onChange={isToggled => onSettingChange('fontBold', isToggled)}>B</ToggleButton>
-                <ToggleButton style={{ fontStyle: 'italic' }} defaultValue={fontItalic}
+                <ToggleButton style={{ fontStyle: 'italic', fontFamily: 'mono' }} defaultValue={fontItalic}
                     onChange={isToggled => onSettingChange('fontItalic', isToggled)}>I</ToggleButton>
                 <ToggleButton style={{ textDecoration: 'underline' }} defaultValue={fontUnderline}
                     onChange={isToggled => onSettingChange('fontUnderline', isToggled)}>U</ToggleButton>

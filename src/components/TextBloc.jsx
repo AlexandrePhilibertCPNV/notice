@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import useDragging from '../hooks/useDragging';
+
 const StyledTextBloc = styled.div`
     position: absolute;
     min-width: 100px;
@@ -44,13 +46,14 @@ function TextBloc(props) {
     const textContent = useRef(null);
     const [isDragged, setIsDragged] = useState(false);
     const [part, setPart] = useState(props.part);
+    const [ref, x, y, isDragging] = useDragging(part.position);
 
     useEffect(() => {
         textContent.current.focus();
     }, [textContent]);
 
     function handleMouseDown() {
-        
+
     }
 
     function handleMouseMove(evt) {
@@ -85,7 +88,7 @@ function TextBloc(props) {
     }
 
     return (
-        <StyledTextBloc isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: part.position.x, top: part.position.y }}>
+        <StyledTextBloc ref={ref} isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
             <StyledHeader onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
                 <StyledDeleteButton onClick={evt => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
