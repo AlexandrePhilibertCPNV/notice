@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import TextBloc from '../components/TextBloc';
@@ -78,13 +78,15 @@ function Notes(props) {
     });
 
     const [notes, setNotes] = useState([]);
+    const { id: noteId } = useParams();
 
     const [fontFamily, setFontFamily] = useState('Arial');
-    const [fontSize, setFontSize] = useState(12);
+    const [fontSize, setFontSize] = useState(14);
     const [fontBold, setFontBold] = useState(false);
     const [fontItalic, setFontItalic] = useState(false);
     const [fontUnderline, setFontUnderline] = useState(false);
     const [fontColor, setFontColor] = useState('#000');
+    const [selectedPart, setSelectedPart] = useState(false);
 
     useEffect(() => {
         getNotes();
@@ -104,12 +106,12 @@ function Notes(props) {
                         y: evt.clientY - y
                     },
                     meta: {
-                        fontFamily: fontFamily,
-                        fontSize: fontSize,
-                        bold: fontBold,
-                        italic: fontItalic,
-                        underline: fontUnderline,
-                        color: fontColor
+                        fontFamily,
+                        fontSize,
+                        fontBold,
+                        fontItalic,
+                        fontUnderline,
+                        fontColor
                     }
                 }
             ]
@@ -127,12 +129,39 @@ function Notes(props) {
         });
     }
 
+    function handleSelect(textBloc) {
+        setSelectedPart(textBloc);
+    }
+
+    function handleSettingChange(type, value) {
+        switch (type) {
+            case 'fontFamily':
+                setFontFamily(value);
+                break;
+            case 'fontSize':
+                setFontSize(value);
+                break;
+            case 'fontBold':
+                setFontBold(value);
+                break;
+            case 'fontItalic':
+                setFontItalic(value);
+                break;
+            case 'fontUnderline':
+                setFontUnderline(value);
+                break;
+            case 'fontColor':
+                setFontColor(value);
+                break;
+        }
+    }
+
     function newNoteButtonPressed() {
         newNoteNameInputRef.current.text = "";
         newNoteNameInputRef.current.style.visibility = "visible";
         newNoteNameInputRef.current.focus();
     }
-
+    
     async function getNotes() {
         let response = await fetch("http://localhost:8000/notes", {method: "GET"});
         let json = await response.json();
@@ -140,13 +169,13 @@ function Notes(props) {
     }
 
     function newNoteInputKeyPress(event) {
-        if(event.charCode == 13) {
+        if (event.charCode == 13) {
             event.preventDefault();
-            
+
             let elem = newNoteNameInputRef.current;
-            if(elem.text.length === 0)
+            if (elem.text.length === 0)
                 return;
-            
+
             fetch("http://localhost:8000/notes", {
                 method: "POST",
                 headers: {
@@ -157,12 +186,12 @@ function Notes(props) {
                     'children': []
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                getNotes();
-                props.history.push("/notes/" + data["_id"]);
-                elem.style.visibility = "collapse";
-            });
+                .then(response => response.json())
+                .then(data => {
+                    getNotes();
+                    props.history.push("/notes/" + data["_id"]);
+                    elem.style.visibility = "collapse";
+                });
         }
     }
 
@@ -175,24 +204,28 @@ function Notes(props) {
                 fontItalic={fontItalic}
                 fontUnderline={fontUnderline}
                 fontColor={fontColor}
-                onFontChange={setFontFamily} onFontSizeChange={setFontSize}
-                onFontBoldChange={setFontBold} onFontItalicChange={setFontItalic}
-                onFontUnderlineChange={setFontUnderline} onFontColorChange={setFontColor} />
+                onSettingChange={handleSettingChange}
+                noteName={note.name} />
             <StyledContainer>
-                <StyledLeftContainer>   
-                        <StyledNewNoteButton onClick={ newNoteButtonPressed }>
-                            + Nouvelle note
+                <StyledLeftContainer>
+                    <StyledNewNoteButton onClick={newNoteButtonPressed}>
+                        + Nouvelle note
                         </StyledNewNoteButton>
-                        <StyledNewNoteNameInput ref={ newNoteNameInputRef }
-                            contentEditable="true"
-                            onKeyPress={ newNoteInputKeyPress }
-                        ></StyledNewNoteNameInput>
-                        { notes.map(n => <StyledNote as={ NavLink } to={"/notes/" + n._id}>{n.name}</StyledNote>) }
+                    <StyledNewNoteNameInput ref={newNoteNameInputRef}
+                        contentEditable="true"
+                        onKeyPress={newNoteInputKeyPress}
+                    ></StyledNewNoteNameInput>
+                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>
+                        {note.name}
+                    </StyledNote>)}
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
                     {note.parts.map((part, i) => <TextBloc key={i}
                         handleUpdate={updateTextBloc}
-                        handleDelete={deleteTextBloc} part={part}
+                        handleDelete={deleteTextBloc}
+                        handleSelect={handleSelect}
+                        isSelected={selectedPart == part}
+                        part={part}
                         container={drawArea} />)}
                 </StyledDrawArea>
             </StyledContainer>

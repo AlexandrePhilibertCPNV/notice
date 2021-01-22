@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StyledTextBloc = styled.div`
     position: absolute;
     min-width: 100px;
     border: 1px solid #dfdfdf;
+
+    ${props => props.isSelected && css`
+        background-color: green;
+    `}
 `;
 
 const StyledHeader = styled.div`
@@ -35,7 +39,7 @@ const StyledTextContent = styled.div`
 `;
 
 function TextBloc(props) {
-    const { container, handleSave, handleUpdate, handleDelete } = props;
+    const { container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected } = props;
 
     const textContent = useRef(null);
     const [isDragged, setIsDragged] = useState(false);
@@ -46,25 +50,30 @@ function TextBloc(props) {
     }, [textContent]);
 
     function handleMouseDown() {
-        setIsDragged(true);
+        
     }
 
     function handleMouseMove(evt) {
         if (!isDragged) return;
 
-        const { x, y } = container.current.getBoundingClientRect();
+        // const { x, y } = container.current.getBoundingClientRect();
 
-        setPart({
-            ...part,
-            position: {
-                x: evt.clientX - x,
-                y: evt.clientY - y
-            }
-        });
+        // setPart({
+        //     ...part,
+        //     position: {
+        //         x: evt.clientX - x,
+        //         y: evt.clientY - y
+        //     }
+        // });
     }
 
     function handleMouseUp() {
         setIsDragged(false);
+        handleUpdate(part);
+    }
+
+    function handleFocus() {
+        handleSelect(part);
     }
 
     function handleBlur() {
@@ -76,20 +85,20 @@ function TextBloc(props) {
     }
 
     return (
-        <StyledTextBloc onClick={evt => evt.stopPropagation()} style={{ left: part.position.x, top: part.position.y }}>
+        <StyledTextBloc isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: part.position.x, top: part.position.y }}>
             <StyledHeader onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
                 <StyledDeleteButton onClick={evt => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
-            <StyledTextContent onBlur={handleBlur} ref={textContent}
+            <StyledTextContent onFocus={handleFocus} onBlur={handleBlur} ref={textContent}
                 contentEditable suppressContentEditableWarning={true}
                 style={{
                     fontFamily: part.meta.fontFamily,
-                    color: part.meta.fontColor, 
-                    fontSize: part.meta.fontSize + 'px', 
-                    fontWeight: part.meta.fontWeight, 
+                    color: part.meta.fontColor,
+                    fontSize: part.meta.fontSize + 'px',
+                    fontWeight: part.meta.fontBold ? 'bold' : 'normal',
                     fontStyle: part.meta.fontItalic ? 'italic' : 'normal',
                     textDecoration: part.meta.fontUnderline ? 'underline' : 'none'
-                 }}
+                }}
             >{part.content}</StyledTextContent>
         </StyledTextBloc>
     );
