@@ -46,7 +46,7 @@ function useDragging({ x = 0, y = 0 }, containerRef) {
         ref.current.addEventListener("mousedown", onMouseDown);
 
         return () => {
-            ref.current.removeEventListener("mousedown", onMouseDown);
+            ref.current?.removeEventListener("mousedown", onMouseDown);
         };
     }, [ref.current]);
 
