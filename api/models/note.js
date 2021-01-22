@@ -16,10 +16,10 @@ const noteSchema = new mongoose.Schema({
         meta: {
             fontFamily: String,
             fontSize: String,
-            bold: String,
-            italic: String,
-            underline: String,
-            color: String
+            fontBold: String,
+            fontItalic: String,
+            fontUnderline: String,
+            fontColor: String
         }
     }]
 });

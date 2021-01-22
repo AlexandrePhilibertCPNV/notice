@@ -88,9 +88,11 @@ function Notes(props) {
     const [fontColor, setFontColor] = useState('#000');
     const [selectedPart, setSelectedPart] = useState(false);
 
+    // on noteId change
     useEffect(() => {
         getNotes();
-    });
+        switchToNote(noteId);
+    }, [noteId]);
 
     function createTextBloc(evt) {
         const { x, y } = drawArea.current.getBoundingClientRect();
@@ -168,7 +170,19 @@ function Notes(props) {
         setNotes(json);
     }
 
-    function newNoteInputKeyPress(event) {
+    async function switchToNote(nid) {
+        if(!nid)
+            return;
+
+        let response = await fetch("http://localhost:8000/notes/" + nid, {method: "GET"});
+        let json = await response.json();
+
+        console.log(json);
+
+        setNote(json);
+    }
+
+    async function newNoteInputKeyPress(event) {
         if (event.charCode == 13) {
             event.preventDefault();
 
@@ -176,7 +190,7 @@ function Notes(props) {
             if (elem.text.length === 0)
                 return;
 
-            fetch("http://localhost:8000/notes", {
+            await fetch("http://localhost:8000/notes", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -226,6 +240,7 @@ function Notes(props) {
                         handleSelect={handleSelect}
                         isSelected={selectedPart == part}
                         part={part}
+                        noteId={noteId}
                         container={drawArea} />)}
                 </StyledDrawArea>
             </StyledContainer>
