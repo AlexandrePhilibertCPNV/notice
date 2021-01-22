@@ -57,11 +57,12 @@ function Notes() {
     });
 
     const [fontFamily, setFontFamily] = useState('Arial');
-    const [fontSize, setFontSize] = useState(12);
+    const [fontSize, setFontSize] = useState(14);
     const [fontBold, setFontBold] = useState(false);
     const [fontItalic, setFontItalic] = useState(false);
     const [fontUnderline, setFontUnderline] = useState(false);
     const [fontColor, setFontColor] = useState('#000');
+    const [selectedPart, setSelectedPart] = useState(false);
 
     function createTextBloc(evt) {
         const { x, y } = drawArea.current.getBoundingClientRect();
@@ -77,12 +78,12 @@ function Notes() {
                         y: evt.clientY - y
                     },
                     meta: {
-                        fontFamily: fontFamily,
-                        fontSize: fontSize,
-                        bold: fontBold,
-                        italic: fontItalic,
-                        underline: fontUnderline,
-                        color: fontColor
+                        fontFamily,
+                        fontSize,
+                        fontBold,
+                        fontItalic,
+                        fontUnderline,
+                        fontColor
                     }
                 }
             ]
@@ -100,6 +101,33 @@ function Notes() {
         });
     }
 
+    function handleSelect(textBloc) {
+        setSelectedPart(textBloc);
+    }
+
+    function handleSettingChange(type, value) {
+        switch (type) {
+            case 'fontFamily':
+                setFontFamily(value);
+                break;
+            case 'fontSize':
+                setFontSize(value);
+                break;
+            case 'fontBold':
+                setFontBold(value);
+                break;
+            case 'fontItalic':
+                setFontItalic(value);
+                break;
+            case 'fontUnderline':
+                setfontUnderline(value);
+                break;
+            case 'fontColor':
+                setfontColor(value);
+                break;
+        }
+    }
+
     return (
         <StyledNotesContainer>
             <Toolbar
@@ -109,9 +137,8 @@ function Notes() {
                 fontItalic={fontItalic}
                 fontUnderline={fontUnderline}
                 fontColor={fontColor}
-                onFontChange={setFontFamily} onFontSizeChange={setFontSize}
-                onFontBoldChange={setFontBold} onFontItalicChange={setFontItalic}
-                onFontUnderlineChange={setFontUnderline} onFontColorChange={setFontColor} />
+                onSettingChange={handleSettingChange}
+                noteName={note.name} />
             <StyledContainer>
                 <StyledLeftContainer>
                     <StyledNewNote>
@@ -130,7 +157,10 @@ function Notes() {
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
                     {note.parts.map((part, i) => <TextBloc key={i}
                         handleUpdate={updateTextBloc}
-                        handleDelete={deleteTextBloc} part={part}
+                        handleDelete={deleteTextBloc}
+                        handleSelect={handleSelect}
+                        isSelected={selectedPart == part}
+                        part={part}
                         container={drawArea} />)}
                 </StyledDrawArea>
             </StyledContainer>
