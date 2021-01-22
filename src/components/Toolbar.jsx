@@ -26,6 +26,12 @@ const StyledTopBar = styled.div`
 const StyledToolBar = styled.div`
     background-color: #fcfcfc;
     border-bottom: 1px solid #e4e4e4;
+    display: flex;
+    flex-flow: row nowrap;
+
+    & > * {
+        margin: .25em .5em;
+    }
 `;
 
 const fonts = [
@@ -50,14 +56,17 @@ function Toolbar({
         <div onClick={evt => evt.stopPropagation()}>
             <StyledTopBar><h1>Notice</h1><div>{noteName}</div></StyledTopBar>
             <StyledToolBar>
-                <select name="font" id="" onChange={evt => onSettingChange('onFontChange', evt.target.value)}>
+                <select name="font" id="" onChange={evt => onSettingChange('fontFamily', evt.target.value)}>
                     {fonts.map((font, i) => <option key={i} name={font}>{font}</option>)}
                 </select>
-                <input defaultValue={fontSize} type="number" onBlur={evt => onSettingChange('onFontSizeChange', evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
-                <ToggleButton defaultValue={fontBold} onChange={isToggled => onSettingChange('onFontBoldChange', isToggled)}>B</ToggleButton>
-                <ToggleButton defaultValue={fontItalic} onChange={isToggled => onSettingChange('onFontItalicChange', isToggled)}>I</ToggleButton>
-                <ToggleButton defaultValue={fontUnderline} onChange={isToggled => onSettingChange('onFontUnderlineChange', isToggled)}>U</ToggleButton>
-                <ColorPicker />
+                <input defaultValue={fontSize} type="number" onBlur={evt => onSettingChange('fontSize', evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
+                <ToggleButton style={{ fontWeight: 'bold' }} defaultValue={fontBold}
+                    onChange={isToggled => onSettingChange('fontBold', isToggled)}>B</ToggleButton>
+                <ToggleButton style={{ fontStyle: 'italic' }} defaultValue={fontItalic}
+                    onChange={isToggled => onSettingChange('fontItalic', isToggled)}>I</ToggleButton>
+                <ToggleButton style={{ textDecoration: 'underline' }} defaultValue={fontUnderline}
+                    onChange={isToggled => onSettingChange('fontUnderline', isToggled)}>U</ToggleButton>
+                <ColorPicker onChange={color => onSettingChange('fontColor', color)} />
             </StyledToolBar>
         </div>
     );

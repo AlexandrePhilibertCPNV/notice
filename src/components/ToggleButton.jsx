@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledToggleButton = styled.button`
+    margin: .25em;
+    padding: .25em .5em;
+    width: 2em;
+    border: 1px solid #ccc;
+    background-color: #eee;
     cursor: pointer;
     
     ${props => props.isActive && css`
@@ -9,7 +14,7 @@ const StyledToggleButton = styled.button`
     `}
 `;
 
-function ToggleButton({ children, onChange, defaultValue }) {
+function ToggleButton({ children, onChange, defaultValue, ...props }) {
     const [isActive, setIsActive] = useState(defaultValue);
 
     function handleClick() {
@@ -18,7 +23,7 @@ function ToggleButton({ children, onChange, defaultValue }) {
     }
 
     return (
-        <StyledToggleButton isActive={isActive} onClick={handleClick}>{children}</StyledToggleButton>
+        <StyledToggleButton isActive={isActive} onClick={handleClick} {...props}>{children}</StyledToggleButton>
     );
 }
 
