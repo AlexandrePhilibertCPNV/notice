@@ -40,38 +40,15 @@ const StyledTextContent = styled.div`
     padding: 4px 6px;
 `;
 
-function TextBloc(props) {
-    const { container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected } = props;
-
+function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected, part}) {
+    const [ref, x, y, isDragging] = useDragging(part.position, container);
     const textContent = useRef(null);
-    const [isDragged, setIsDragged] = useState(false);
-    const [part, setPart] = useState(props.part);
-    const [ref, x, y, isDragging] = useDragging(part.position);
 
     useEffect(() => {
         textContent.current.focus();
     }, [textContent]);
 
-    function handleMouseDown() {
-
-    }
-
-    function handleMouseMove(evt) {
-        if (!isDragged) return;
-
-        // const { x, y } = container.current.getBoundingClientRect();
-
-        // setPart({
-        //     ...part,
-        //     position: {
-        //         x: evt.clientX - x,
-        //         y: evt.clientY - y
-        //     }
-        // });
-    }
-
     function handleMouseUp() {
-        setIsDragged(false);
         handleUpdate(part);
     }
 
@@ -89,7 +66,7 @@ function TextBloc(props) {
 
     return (
         <StyledTextBloc ref={ref} isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
-            <StyledHeader onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+            <StyledHeader onMouseUp={handleMouseUp}>
                 <StyledDeleteButton onClick={evt => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
             <StyledTextContent onFocus={handleFocus} onBlur={handleBlur} ref={textContent}
