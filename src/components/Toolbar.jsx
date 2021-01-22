@@ -1,10 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ColorPicker from './ColorPicker';
 import ToggleButton from './ToggleButton';
 
 const StyledTopBar = styled.div`
+    display: flex;
+    align-items: center;
     padding: .5em;
     background-color: #31b5ab;
     border-bottom: 1px solid #10a599;
@@ -15,11 +18,12 @@ const StyledTopBar = styled.div`
         margin-right: 1em;
         font-weight: 200;
         font-size: 1.5em;
+        user-select: none;
     }
 
-    & > * {
-        display: inline-block;
-        vertical-align: center;
+    & > div {
+        flex: 1 0 auto;
+        user-select: none;
     }
 `;
 
@@ -32,6 +36,11 @@ const StyledToolBar = styled.div`
     & > * {
         margin: .25em .5em;
     }
+`;
+
+const StyledLogoutLink = styled(Link)`
+    color: #fff;
+    text-decoration: none;
 `;
 
 const fonts = [
@@ -54,7 +63,9 @@ function Toolbar({
 
     return (
         <div onClick={evt => evt.stopPropagation()}>
-            <StyledTopBar><h1>Notice</h1><div>{noteName}</div></StyledTopBar>
+            <StyledTopBar>
+                <h1>Notice</h1><div>{noteName}</div><StyledLogoutLink to="/logout">Se déconnecter</StyledLogoutLink>
+            </StyledTopBar>
             <StyledToolBar>
                 <select name="font" id="" onChange={evt => onSettingChange('fontFamily', evt.target.value)}>
                     {fonts.map((font, i) => <option key={i} name={font}>{font}</option>)}
