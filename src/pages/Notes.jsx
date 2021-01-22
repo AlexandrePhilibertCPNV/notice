@@ -92,7 +92,14 @@ function Notes(props) {
         getNotes();
     });
 
-    function createTextBloc(evt) {
+    function handleClick(evt) {
+        // We do not create a new TextBloc if we had another one selected before
+        // clicking in the DrawArea
+        if (selectedPart) {
+            setSelectedPart(false);
+            return;
+        }
+
         const { x, y } = drawArea.current.getBoundingClientRect();
 
         setNote({
@@ -219,7 +226,7 @@ function Notes(props) {
                         {note.name}
                     </StyledNote>)}
                 </StyledLeftContainer>
-                <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
+                <StyledDrawArea ref={drawArea} onClick={handleClick}>
                     {note.parts.map((part, i) => <TextBloc key={i}
                         handleUpdate={updateTextBloc}
                         handleDelete={deleteTextBloc}

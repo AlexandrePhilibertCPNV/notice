@@ -7,10 +7,8 @@ function useDragging({ x = 0, y = 0 }, containerRef) {
     const ref = useRef(null);
 
     useEffect(() => {
-        if (!containerRef?.current) return;
-
         setContainerPos(containerRef.current.getBoundingClientRect());
-    }, [containerRef?.current]);
+    }, [containerRef.current]);
 
     function onMouseMove(e) {
         if (!isDragging) return;
