@@ -1,16 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 
-function useDragging({ x = 0, y = 0 }) {
+function useDragging({ x = 0, y = 0 }, containerRef) {
     const [isDragging, setIsDragging] = useState(false);
     const [pos, setPos] = useState({ x, y });
+    const [containerPos, setContainerPos] = useState({x: 0, y: 0});
     const ref = useRef(null);
+
+    useEffect(() => {
+        if (!containerRef?.current) return;
+
+        setContainerPos(containerRef.current.getBoundingClientRect());
+    }, [containerRef?.current]);
 
     function onMouseMove(e) {
         if (!isDragging) return;
+
         setPos({
-            x: e.x - ref.current.offsetWidth / 2,
-            y: e.y - ref.current.offsetHeight / 2,
+            x: e.x - ref.current.offsetWidth / 2 - containerPos.x,
+            y: e.y - ref.current.offsetHeight / 2 - containerPos.y,
         });
+
         e.stopPropagation();
         e.preventDefault();
     }
@@ -26,8 +35,8 @@ function useDragging({ x = 0, y = 0 }) {
         setIsDragging(true);
 
         setPos({
-            x: e.x - ref.current.offsetWidth / 2,
-            y: e.y - ref.current.offsetHeight / 2,
+            x: e.x - ref.current.offsetWidth / 2 - containerPos.x,
+            y: e.y - ref.current.offsetHeight / 2 - containerPos.y,
         });
 
         e.stopPropagation();
@@ -47,15 +56,15 @@ function useDragging({ x = 0, y = 0 }) {
     // the corresponding mousemove and mouseup handlers
     useEffect(() => {
         if (isDragging) {
-            document.addEventListener("mouseup", onMouseUp);
-            document.addEventListener("mousemove", onMouseMove);
+            containerRef.current.addEventListener("mouseup", onMouseUp);
+            containerRef.current.addEventListener("mousemove", onMouseMove);
         } else {
-            document.removeEventListener("mouseup", onMouseUp);
-            document.removeEventListener("mousemove", onMouseMove);
+            containerRef.current.removeEventListener("mouseup", onMouseUp);
+            containerRef.current.removeEventListener("mousemove", onMouseMove);
         }
         return () => {
-            document.removeEventListener("mouseup", onMouseUp);
-            document.removeEventListener("mousemove", onMouseMove);
+            containerRef.current.removeEventListener("mouseup", onMouseUp);
+            containerRef.current.removeEventListener("mousemove", onMouseMove);
         };
     }, [isDragging]);
 
