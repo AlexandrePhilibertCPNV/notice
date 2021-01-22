@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Notes from './pages/Notes';
+import Logout from './pages/Logout';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" component={Login}/> 
             <Route path="/signup" component={Signup}/> 
             <Route path="/notes" component={Notes}/>
+            <Route path="/logout" component={Logout}/>
           </Switch>
        </Router>
   );
