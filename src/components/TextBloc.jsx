@@ -107,10 +107,10 @@ function TextBloc(props) {
                 "meta": {
                     fontFamily: part.meta.fontFamily,
                     fontColor: part.meta.fontColor,
-                    fontSize: part.meta.fontSize + 'px',
-                    fontBold: part.meta.fontBold ? 'bold' : 'normal',
-                    fontItalic: part.meta.fontItalic ? 'italic' : 'normal',
-                    fontUnderline: part.meta.fontUnderline ? 'underline' : 'none'
+                    fontSize: part.meta.fontSize,
+                    fontBold: part.meta.fontBold,
+                    fontItalic: part.meta.fontItalic,
+                    fontUnderline: part.meta.fontUnderline
                 }
             })
         })
