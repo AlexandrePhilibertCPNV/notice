@@ -234,7 +234,7 @@ function Notes(props) {
                     </StyledNote>)}
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>
-                    {note.parts.map((part, i) => <TextBloc key={i}
+                    {note.parts.map((part) => <TextBloc key={part._id}
                         handleUpdate={updateTextBloc}
                         handleDelete={deleteTextBloc}
                         handleSelect={handleSelect}
