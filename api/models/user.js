@@ -15,24 +15,20 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String
     },
-    tokens: [
-        {
-            value: String,
-        }
-    ],
+    tokens: Array,
 });
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
     var user = this.toObject();
     delete user.password;
-    delete user.tokens;
+    // delete user.tokens;
     return user;
-  }
-  
+}
 
-userSchema.pre('save', async function(next) {
-    this.password = await bcrypt.hash(this.password, 10);    
-    
+
+userSchema.pre('save', async function (next) {
+    this.password = await bcrypt.hash(this.password, 10);
+
     next();
 });
 

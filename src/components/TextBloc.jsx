@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 
 import useDragging from '../hooks/useDragging';
@@ -40,7 +40,7 @@ const StyledTextContent = styled.div`
     padding: 4px 6px;
 `;
 
-function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected, part}) {
+function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected, part, noteId}) {
     const [ref, x, y, isDragging] = useDragging(part.position, container);
     const textContent = useRef(null);
 
@@ -71,7 +71,7 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
     }
 
     async function savePart() {
-        await fetch("http://localhost:8000/notes/" + props.noteId + "/pushPart", {
+        await fetch("http://localhost:8000/notes/" + noteId + "/pushPart", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
