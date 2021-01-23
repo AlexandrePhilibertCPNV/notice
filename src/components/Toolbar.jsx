@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import ColorPicker from './ColorPicker';
 import ToggleButton from './ToggleButton';
 
+import AccountButton from './AccountButton';
+
 const StyledTopBar = styled.div`
     display: flex;
     align-items: center;
@@ -20,11 +22,6 @@ const StyledTopBar = styled.div`
         font-size: 1.5em;
         user-select: none;
     }
-
-    & > div {
-        flex: 1 0 auto;
-        user-select: none;
-    }
 `;
 
 const StyledToolBar = styled.div`
@@ -38,9 +35,9 @@ const StyledToolBar = styled.div`
     }
 `;
 
-const StyledLogoutLink = styled(Link)`
-    color: #fff;
-    text-decoration: none;
+const StyledNoteName = styled.div`
+    flex: 1 0 auto;
+    user-select: none;
 `;
 
 const fonts = [
@@ -64,7 +61,9 @@ function Toolbar({
     return (
         <div onClick={evt => evt.stopPropagation()}>
             <StyledTopBar>
-                <h1>Notice</h1><div>{noteName}</div><StyledLogoutLink to="/logout">Se déconnecter</StyledLogoutLink>
+                <h1>Notice</h1>
+                <StyledNoteName>{noteName}</StyledNoteName>
+                <AccountButton />
             </StyledTopBar>
             <StyledToolBar>
                 <select name="font" id="" onChange={evt => onSettingChange('fontFamily', evt.target.value)}>
