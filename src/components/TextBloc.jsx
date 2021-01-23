@@ -81,8 +81,8 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
                 "type": "text",
                 "content": textContent.current.innerText,
                 "position": {
-                    "x": part.position.x,
-                    "y": part.position.y
+                    "x": x,
+                    "y": y
                 },
                 "meta": {
                     fontFamily: part.meta.fontFamily,
