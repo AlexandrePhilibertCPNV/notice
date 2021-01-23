@@ -24,11 +24,13 @@ app.use('/notes', require('./routes/note'));
 app.use((err, req, res, next) => {
     // Basic error handling, we could have multiple error types we could handle here
     if (err) {
-        console.error(err.stack);
+        if (err.stack) {
+            console.error(err.stack);
+        }
 
-        res.status(500);
+        res.status(err.code || 500);
         res.json({
-            message: 'Internal server error',
+            message: err.message || 'Internal server error',
         });
     }
 });
