@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+
+import useInput from '../hooks/useInput';
 
 import LogoSVG from '../assets/logo.svg';
 
@@ -26,7 +28,7 @@ const StyledContainer = styled.div`
     }
 `;
 
-const StyledLeftContainer = styled.div`
+const StyledLeftContainer = styled.form`
     margin: 5em;
     padding: 5em;
     max-width: 600px;
@@ -63,21 +65,58 @@ const StyledRightLogo = styled(LogoSVG)`
     padding: 7.5em;
 `;
 
-function Login() {
+function Signup() {
+
+    const formRef = useRef(null);
+
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const firstname = useInput();
+    const lastname = useInput();
+    const email = useInput();
+    const password = useInput();
+    const passwordConfirm = useInput();
+    const history = useHistory();
+
+    async function signup(e) {
+        e.preventDefault();
+        
+        setPasswordMatch(password.value === passwordConfirm.value);
+
+        if (!formRef.current.checkValidity()) return;
+        if (!passwordMatch) return;
+
+        let response = await fetch('http://localhost:8000/users', {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstname: firstname.value,
+                lastname: lastname.value,
+                email: email.value,
+                password: password.value,
+            }),
+        });
+
+        let json = await response.json();
+
+        history.push('/login');
+    }
+
     return (
         <>
             <StyledHeader>
                 <StyledLogo />
             </StyledHeader>
             <StyledContainer>
-                <StyledLeftContainer>
+                <StyledLeftContainer ref={formRef}>
                     <h1>Créer un compte</h1>
-                    <input type="text" placeholder="Entrez votre prénom"/>
-                    <input type="text" placeholder="Entrez votre nom"/>
-                    <input type="email" placeholder="Entrez votre email" />
-                    <input type="password" placeholder="Entrez votre mot de passe" />
-                    <input type="password" placeholder="Confirmez votre mot de passe" />
-                    <LoginButton>Créer un compte</LoginButton>
+                    <input required {...firstname} type="text" placeholder="Entrez votre prénom" />
+                    <input required {...lastname} type="text" placeholder="Entrez votre nom" />
+                    <input required {...email} type="email" placeholder="Entrez votre email" />
+                    <input required {...password} type="password" placeholder="Entrez votre mot de passe" />
+                    <input required {...passwordConfirm} type="password" placeholder="Confirmez votre mot de passe" />
+                    {passwordMatch ? null : <div>les mots de passe ne correspondent pas</div>}
+                    <LoginButton onClick={e => signup(e)}>Créer un compte</LoginButton>
                     <SignupLink as={Link} to="/login">Se connecter</SignupLink>
                 </StyledLeftContainer>
                 <div>
@@ -88,4 +127,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Signup;
