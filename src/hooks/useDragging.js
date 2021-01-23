@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-function useDragging({ x = 0, y = 0 }, containerRef) {
+function useDragging({ x = 0, y = 0 }, containerRef, onStoppedDraggingHandler) {
     const [isDragging, setIsDragging] = useState(false);
+    const [wasDragging, setWasDragging] = useState(false);
     const [pos, setPos] = useState({ x, y });
     const [containerPos, setContainerPos] = useState({x: 0, y: 0});
     const ref = useRef(null);
@@ -9,6 +10,18 @@ function useDragging({ x = 0, y = 0 }, containerRef) {
     useEffect(() => {
         setContainerPos(containerRef.current.getBoundingClientRect());
     }, [containerRef.current]);
+
+    useEffect(() => {
+        if(isDragging) {
+            setWasDragging(true);
+        }
+        
+        if(!isDragging && wasDragging) {
+            onStoppedDraggingHandler();
+            setWasDragging(false);
+        }
+
+    }, [isDragging]);
 
     function onMouseMove(e) {
         if (!isDragging) return;

@@ -41,7 +41,7 @@ const StyledTextContent = styled.div`
 `;
 
 function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSelect, isSelected, part, noteId}) {
-    const [ref, x, y, isDragging] = useDragging(part.position, container);
+    const [ref, x, y, isDragging] = useDragging(part.position, container, onStoppedDragging);
     const textContent = useRef(null);
 
     useEffect(() => {
@@ -56,6 +56,10 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
         handleSelect(part);
     }
 
+    async function onStoppedDragging() {
+        savePart();
+    }
+
     function handleBlur() {
         // We do not want to save an empty text bloc
         if (textContent.current.innerText === '') {
@@ -63,11 +67,10 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
             return;
         }
 
-        if(textContent.current.innerText == part.content) { // Only update if content changed
-            return;
+        // Only update if content changed
+        if(textContent.current.innerText != part.content) { 
+            savePart();
         }
-
-        savePart();
     }
 
     async function savePart() {
@@ -96,7 +99,7 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
         })
             .then(response => response.json())
             .then(data => {
-                setPart(data[0]);
+                //setPart(data[0]);
             });
     }
 
