@@ -211,9 +211,14 @@ function Notes(props) {
                 .then(data => {
                     getNotes();
                     props.history.push("/notes/" + data["_id"]);
-                    elem.style.visibility = "collapse";
+                    hideNewNoteInput()
                 });
         }
+    }
+
+    function hideNewNoteInput() {
+        newNoteNameInputRef.current.style.visibility = "collapse";
+        newNoteNameInputRef.current.text = "";
     }
 
     return (
@@ -235,6 +240,7 @@ function Notes(props) {
                     <StyledNewNoteNameInput ref={newNoteNameInputRef}
                         contentEditable="true"
                         onKeyPress={newNoteInputKeyPress}
+                        onBlur={hideNewNoteInput}
                     ></StyledNewNoteNameInput>
                     {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>
                         {note.name}
