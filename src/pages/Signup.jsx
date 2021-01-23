@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -24,7 +24,7 @@ const StyledContainer = styled.div`
         display: flex;
         flex-flow: column wrap;
         flex: 1 1 50%;
-
+        justify-content: center;
     }
 `;
 
@@ -48,6 +48,10 @@ const StyledLeftContainer = styled.form`
     }
 `;
 
+const StyledRightContainer = styled.div`
+    align-items: center;
+`;
+
 const LoginButton = styled.button`
     background-color: #31b5ab;
     border: 1px solid #10a599;
@@ -61,8 +65,8 @@ const SignupLink = styled(Link)`
 `;
 
 const StyledRightLogo = styled(LogoSVG)`
-    width: 75%;
-    padding: 7.5em;
+    max-width: 600px;
+    margin-right: 2em;
 `;
 
 function Signup() {
@@ -82,7 +86,7 @@ function Signup() {
         
         setPasswordMatch(password.value === passwordConfirm.value);
 
-        if (!formRef.current.checkValidity()) return;
+        if (!formRef.current.reportValidity()) return;
         if (!passwordMatch) return;
 
         let response = await fetch('http://localhost:8000/users', {
@@ -119,9 +123,9 @@ function Signup() {
                     <LoginButton onClick={e => signup(e)}>Créer un compte</LoginButton>
                     <SignupLink as={Link} to="/login">Se connecter</SignupLink>
                 </StyledLeftContainer>
-                <div>
+                <StyledRightContainer>
                     <StyledRightLogo />
-                </div>
+                </StyledRightContainer>
             </StyledContainer>
         </>
     );
