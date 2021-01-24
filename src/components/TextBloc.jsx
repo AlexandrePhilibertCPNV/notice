@@ -109,10 +109,9 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
                     fontFamily: part.meta.fontFamily,
                     color: part.meta.fontColor,
                     fontSize: part.meta.fontSize + 'px',
-                    // This is dumb, but the api returns boolean as a string...
-                    fontWeight: part.meta.fontBold == true ? 'bold' : 'normal',
-                    fontStyle: part.meta.fontItalic == true ? 'italic' : 'normal',
-                    textDecoration: part.meta.fontUnderline == true ? 'underline' : 'none'
+                    fontWeight: part.meta.fontBold ? 'bold' : 'normal',
+                    fontStyle: part.meta.fontItalic ? 'italic' : 'normal',
+                    textDecoration: part.meta.fontUnderline ? 'underline' : 'none'
                 }}
             >{part.content}</StyledTextContent>
         </StyledTextBloc>
