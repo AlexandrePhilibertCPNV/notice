@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import AccountSVG from '../assets/account.svg';
 
@@ -63,8 +63,9 @@ function AccountButton() {
 
     const [isActive, setIsActive] = useState(false);
     const ref = useRef(null);
+    const history = useHistory();
 
-    function handleClick(evt) {
+    function handleClick(e) {
         setIsActive(!isActive);
         
         if (isActive) {
@@ -80,7 +81,7 @@ function AccountButton() {
                     <StyledLink as={Link} to="/account">Mon compte</StyledLink>
                 </li>
                 <li>
-                    <StyledLink as={Link} to="/logout">Se déconnecter</StyledLink>
+                    <StyledLink onMouseDown={e => history.push('/logout')} as={Link} to="/logout">Se déconnecter</StyledLink>
                 </li>
             </StyledAccountMenu>
         </StyledAccountButtonContainer>

@@ -8,6 +8,14 @@ class Session {
 
         const user = await User.findOne({email: req.body.email});
 
+        if (!user) {
+            res.json({
+                message: 'Invalid login supplied',
+            });
+            
+            return;
+        }
+
         if (!bcrypt.compareSync(req.body.password, user.password)) {
             next({code: 403, message: 'Invalid login supplied'});
             return;
@@ -16,7 +24,8 @@ class Session {
         await User.updateOne({ _id: user._id }, { $push: { tokens: value } });
 
         res.json({
-            value
+            userId: user._id,
+            token: value
         });
     }
 }

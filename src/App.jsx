@@ -21,8 +21,8 @@ function App() {
             <PrivateRoute exact path="/" component={Home}/> 
             <Route path="/login" component={Login}/> 
             <Route path="/signup" component={Signup}/> 
-            <Route path="/notes/:id" component={Notes}/>
-            <Route path="/notes" component={Notes}/>
+            <PrivateRoute path="/notes/:id" component={Notes}/>
+            <PrivateRoute path="/notes" component={Notes}/>
             <Route path="/logout" component={Logout}/>
           </Switch>
        </Router>

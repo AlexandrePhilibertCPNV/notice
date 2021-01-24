@@ -75,13 +75,16 @@ function Login() {
     const password = useInput();
     const history = useHistory();
     const formRef = useRef(null);
+    const [isError, setIsError] = useState(false);
 
     async function login(e) {
         e.preventDefault();
 
         if (!formRef.current.reportValidity()) return;
 
-        let response = await fetch('http://localhost:8000/users', {
+        setIsError(false);
+
+        let response = await fetch('http://localhost:8000/sessions', {
             method: 'POST', headers: {
                 'Content-Type': 'application/json'
             },
@@ -97,6 +100,8 @@ function Login() {
             localStorage.setItem('token', json.token);
 
             history.push('/notes');
+        } else {
+            setIsError(true);
         }
 
     }
@@ -112,6 +117,7 @@ function Login() {
                     <h1>Se connecter</h1>
                     <input required {...email} type="email" placeholder="Entrez votre email" />
                     <input required {...password} type="password" placeholder="Entrez votre mot de passe" />
+                    {isError ? <div style={{color: 'red'}}>Une erreur est survenue</div> : null}
                     <LoginButton onClick={login}>Se connecter</LoginButton>
                     <SignupLink as={Link} to="/signup">Créer un compte</SignupLink>
                 </StyledLeftContainer>
