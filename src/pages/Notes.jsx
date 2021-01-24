@@ -143,7 +143,7 @@ function Notes(props) {
 
     }
 
-    function deleteTextBloc(textBloc) {
+    async function deleteTextBloc(textBloc) {
         setNote({
             ...note,
             parts: note.parts.filter(part => part != textBloc),
@@ -270,8 +270,7 @@ function Notes(props) {
         if (!nid)
             return;
 
-        // Yes, this is stupid. Too bad!
-        let btn = document.querySelector('[data-noteId="' + nid + '"]');
+        let btn = document.querySelector('#note-' + nid);
         btn.setAttribute("contentEditable", "true");
         btn.focus();
 
@@ -318,7 +317,7 @@ function Notes(props) {
                         onKeyPress={newNoteInputKeyPress}
                         onBlur={hideNewNoteInput}
                     ></StyledNewNoteNameInput>
-                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id} data-noteId={note._id}>
+                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id} id={"note-" + note._id}>
                         {note.name}
                         <NoteActionsButton noteId={noteId} handleDeleteNote={handleDeleteNote} handleRenameNote={handleRenameNote} />
                     </StyledNote>)}

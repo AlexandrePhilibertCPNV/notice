@@ -44,8 +44,8 @@ class NoteController {
     static async pullPart(req, res) {
         let note = await Note.findOne({_id: req.params.id});
         let r = await note.parts.pull({_id: req.params.partId});
-        await note.save();
-
+        let s = await note.save();
+        
         res.json(r);
     }
     
