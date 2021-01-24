@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import NoteActionsButton from '../components/NoteActionsButton';
 
 import TextBloc from '../components/TextBloc';
 import Toolbar from '../components/Toolbar';
@@ -221,6 +222,50 @@ function Notes(props) {
         newNoteNameInputRef.current.text = "";
     }
 
+    async function handleDeleteNote(nid) {
+        if(!nid)
+            return;
+
+        let response = await fetch("http://localhost:8000/notes/" + nid, {method: "DELETE"});
+        let json = await response.json();
+
+        props.history.push("/notes/");
+        getNotes();
+
+        console.log(json);
+    }
+
+    async function handleRenameNote(nid) {
+        if(!nid)
+            return;
+
+        // Yes, this is stupid. Too bad!
+        let btn = document.querySelector('[data-noteId="' + nid + '"]');
+        btn.setAttribute("contentEditable", "true");
+        btn.focus();
+
+        btn.addEventListener('keypress', function(event) {
+            if (event.charCode == 13) {
+                event.preventDefault();
+                
+                fetch("http://localhost:8000/notes/" + nid, {
+                    method: "PATCH",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'name': btn.innerText,
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        btn.setAttribute("contentEditable", "false");
+                    });
+            }
+        });
+        console.log(btn);
+    }
+
     return (
         <StyledNotesContainer>
             <Toolbar
@@ -242,8 +287,9 @@ function Notes(props) {
                         onKeyPress={newNoteInputKeyPress}
                         onBlur={hideNewNoteInput}
                     ></StyledNewNoteNameInput>
-                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id}>
+                    {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id} data-noteId={note._id}>
                         {note.name}
+                    <NoteActionsButton noteId={noteId} handleDeleteNote={handleDeleteNote} handleRenameNote={handleRenameNote} />
                     </StyledNote>)}
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>

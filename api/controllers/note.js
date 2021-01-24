@@ -16,6 +16,14 @@ class NoteController {
         res.json(note);
     }
 
+    static async delete(req, res) {
+        res.json(await Note.deleteOne({_id: req.params.id}));
+    }
+
+    static async update(req, res) {
+        res.json(await Note.updateOne({_id: req.params.id}, req.body));
+    }
+
     static async pushPart(req, res) {
         let note = await Note.findOne({_id: req.params.id});
 
