@@ -2,6 +2,10 @@
 
 NoSQL project for the XML1 project
 
+## Prerequisites
+
+- MongoDB installed
+
 ## Available Scripts
 
 ### npm dev
