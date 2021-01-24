@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import NoteActionsSVG from '../assets/menu_dots.svg';
 
-const StyledLink = styled.button`
+const StyledButton = styled.button`
     display: block;
     color: #888;
     text-decoration: none;
     border: none;
-
+    cursor: pointer;
 `;
 
 const StyledNoteActionsMenu = styled.ul`
@@ -32,7 +32,7 @@ const StyledNoteActionsMenu = styled.ul`
             border-top: 1px solid #ccc;
         }
 
-        & > ${StyledLink} {
+        & > ${StyledButton} {
             padding: .75em;
         }
     }
@@ -95,10 +95,10 @@ function NoteActionsButton({handleDeleteNote, handleRenameNote, noteId}) {
             <StyledNoteActionsSVG /></StyledNoteActionsButton>
             <StyledNoteActionsMenu>
                 <li>
-                    <StyledLink onClick={onRenameButtonClick}>Renommer</StyledLink>
+                    <StyledButton onClick={onRenameButtonClick}>Renommer</StyledButton>
                 </li>
                 <li>
-                    <StyledLink onClick={onDeleteButtonClick}>Supprimer</StyledLink>
+                    <StyledButton onClick={onDeleteButtonClick}>Supprimer</StyledButton>
                 </li>
             </StyledNoteActionsMenu>
         </StyledNoteActionsButtonContainer>
