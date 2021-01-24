@@ -72,7 +72,6 @@ function Notes(props) {
     const drawArea = useRef(null);
     const newNoteNameInputRef = useRef(null);
 
-
     const [note, setNote] = useState({
         name: 'Ma première note',
         parts: [],
@@ -141,9 +140,17 @@ function Notes(props) {
 
     function handleSelect(textBloc) {
         setSelectedPart(textBloc);
+
+        setFontFamily(fontFamily);
+        setFontSize(fontSize);
+        setFontBold(fontBold);
+        setFontItalic(fontItalic);
+        setFontUnderline(fontUnderline);
+        setFontColor(fontColor);
     }
 
     function handleSettingChange(type, value) {
+        // This is bad, but it is faster to write than do it properly :)
         switch (type) {
             case 'fontFamily':
                 setFontFamily(value);
@@ -163,6 +170,20 @@ function Notes(props) {
             case 'fontColor':
                 setFontColor(value);
                 break;
+        }
+
+        if (selectedPart) {
+            setSelectedPart({
+                ...selectedPart,
+                meta: {
+                    fontFamily,
+                    fontSize,
+                    fontBold,
+                    fontItalic,
+                    fontUnderline,
+                    fontColor
+                }
+            });
         }
     }
 
@@ -184,8 +205,6 @@ function Notes(props) {
 
         let response = await fetch("http://localhost:8000/notes/" + nid, {method: "GET"});
         let json = await response.json();
-
-        console.log(json);
 
         setNote(json);
     }

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const StyledColorPicker = styled.div`
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    flex: 1 0 auto;
+
+const StyledAcordionButton = styled.button`
+    padding: .25em .5em;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    text-decoration: underline ${props => props.color} 3px;
+    cursor: pointer;
 `;
 
 const StyledColorContainer = styled.div`
-    display: flex;
+    display: ${props => props.isActive ? 'flex' : 'none'};
     flex-flow: row wrap;
     max-width: 250px;
     position: absolute;
@@ -20,6 +22,14 @@ const StyledColorContainer = styled.div`
     left: -20px;
 `;
 
+
+const StyledColorPicker = styled.div`
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 1 0 auto;
+`;
+
 const StyledColoredButton = styled.button`
     width: 1.5em;
     height: 1.5em;
@@ -27,14 +37,6 @@ const StyledColoredButton = styled.button`
     border: 0;
     margin: .25em;
     cursor: pointer;
-`;
-
-const StyledAcordionButton = styled.button`
-    padding: .25em .5em;
-    border: 1px solid #ccc;
-    background-color: #eee;
-    text-decoration: underline ${props => props.color} 3px;
-
 `;
 
 const colors = [
@@ -50,16 +52,32 @@ const colors = [
 
 function ColorPicker({onChange}) {
     const [color, setColor] = useState('red');
+    const [isActive, setIsActive] = useState(false);
+    const ref = useRef(null);
 
-    function handleClick(color) {
-        onChange(color)
+    function openContainer(e) {
+        setIsActive(!isActive);
+        
+        if (isActive) {
+            ref.current.blur();
+        }
+    }
+
+    function handleClick(e, color) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        setColor(color);
+        onChange(color);
+    
+        ref.current.blur();
     }
 
     return (
         <StyledColorPicker>
-            <StyledAcordionButton color={color}>A</StyledAcordionButton>
-            <StyledColorContainer>
-                {colors.map((color, i) => <StyledColoredButton onClick={evt => handleClick(color)}key={i} style={{ backgroundColor: color }} />)}
+            <StyledAcordionButton ref={ref} onClick={openContainer} onBlur={openContainer} color={color}>A</StyledAcordionButton>
+            <StyledColorContainer isActive={isActive} >
+                {colors.map((color, i) => <StyledColoredButton onMouseDown={e => handleClick(e, color)} key={i} style={{ backgroundColor: color }} />)}
             </StyledColorContainer>
         </StyledColorPicker>
     );

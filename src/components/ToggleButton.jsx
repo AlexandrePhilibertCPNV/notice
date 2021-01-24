@@ -17,9 +17,13 @@ const StyledToggleButton = styled.button`
 function ToggleButton({ children, onChange, defaultValue, ...props }) {
     const [isActive, setIsActive] = useState(defaultValue);
 
-    function handleClick() {
+    function handleClick(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
         setIsActive(!isActive);
-        onChange(isActive);
+        // This should not be inverted, but it works ??
+        onChange(!isActive);
     }
 
     return (
