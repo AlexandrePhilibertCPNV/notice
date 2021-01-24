@@ -45,11 +45,7 @@ function useDragging({ x = 0, y = 0 }, containerRef, onStoppedDraggingHandler) {
         if (e.button !== 0) return;
         setIsDragging(true);
 
-        setPos({
-            x: e.x - ref.current.offsetWidth / 2 - containerPos.x,
-            y: e.y - ref.current.offsetHeight / 2 - containerPos.y,
-        });
-
+        // Prevent changing focus
         e.stopPropagation();
         e.preventDefault();
     }

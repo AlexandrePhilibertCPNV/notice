@@ -84,16 +84,11 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
                 "type": "text",
                 "content": textContent.current.innerText,
                 "position": {
-                    "x": x,
-                    "y": y
+                    x,
+                    y
                 },
                 "meta": {
-                    fontFamily: part.meta.fontFamily,
-                    fontColor: part.meta.fontColor,
-                    fontSize: part.meta.fontSize,
-                    fontBold: part.meta.fontBold,
-                    fontItalic: part.meta.fontItalic,
-                    fontUnderline: part.meta.fontUnderline
+                    ...part.meta,
                 }
             })
         })
@@ -106,7 +101,7 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
     return (
         <StyledTextBloc isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
             <StyledHeader ref={ref} onMouseUp={handleMouseUp}>
-                <StyledDeleteButton onClick={evt => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
+                <StyledDeleteButton onClick={e => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
             <StyledTextContent onFocus={handleFocus} onBlur={handleBlur} ref={textContent}
                 contentEditable suppressContentEditableWarning={true}
