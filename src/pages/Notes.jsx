@@ -132,7 +132,7 @@ function Notes(props) {
 
     }
 
-    function deleteTextBloc(textBloc) {
+    async function deleteTextBloc(textBloc) {
         setNote({
             ...note,
             parts: note.parts.filter(part => part != textBloc),

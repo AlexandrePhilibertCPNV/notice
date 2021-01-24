@@ -73,6 +73,22 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
         }
     }
 
+    async function deletePart() {
+        if(!part._id) {
+            handleDelete(part);
+            return;
+        }
+
+        await fetch("http://localhost:8000/notes/" + noteId + "/pullPart/" + part._id, {
+            method: "POST",
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                handleDelete(part);
+            });
+    }
+
     async function savePart() {
         await fetch("http://localhost:8000/notes/" + noteId + "/pushPart", {
             method: "POST",
@@ -101,7 +117,7 @@ function TextBloc({container, handleSave, handleUpdate, handleDelete, handleSele
     return (
         <StyledTextBloc isSelected={isSelected} onClick={evt => evt.stopPropagation()} style={{ left: x, top: y }}>
             <StyledHeader ref={ref} onMouseUp={handleMouseUp}>
-                <StyledDeleteButton onClick={e => handleDelete(part)} title="Supprimer le bloc de texte">x</StyledDeleteButton>
+                <StyledDeleteButton onClick={e => { deletePart() }} title="Supprimer le bloc de texte">x</StyledDeleteButton>
             </StyledHeader>
             <StyledTextContent onFocus={handleFocus} onBlur={handleBlur} ref={textContent}
                 contentEditable suppressContentEditableWarning={true}
