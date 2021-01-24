@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -69,7 +69,7 @@ function Toolbar({
                 <select name="font" id="" onChange={evt => onSettingChange('fontFamily', evt.target.value)}>
                     {fonts.map((font, i) => <option key={i} name={font}>{font}</option>)}
                 </select>
-                <input defaultValue={fontSize} type="number" onBlur={evt => onSettingChange('fontSize', evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
+                <input defaultValue={fontSize} type="number" min={1} max={150} onBlur={evt => onSettingChange('fontSize', evt.target.value)} onSubmit={evt => onFontSizeChange(evt.target.value)} />
                 <ToggleButton style={{ fontWeight: 'bold' }} defaultValue={fontBold}
                     onChange={isToggled => onSettingChange('fontBold', isToggled)}>B</ToggleButton>
                 <ToggleButton style={{ fontStyle: 'italic', fontFamily: 'mono' }} defaultValue={fontItalic}

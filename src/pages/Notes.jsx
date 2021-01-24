@@ -88,6 +88,18 @@ function Notes(props) {
     const [fontColor, setFontColor] = useState('#000');
     const [selectedPart, setSelectedPart] = useState(false);
 
+    useEffect(() => {
+        if (!selectedPart.meta) return;
+
+        setFontFamily(selectedPart.meta.fontFamily);
+        setFontSize(selectedPart.meta.fontSize);
+        setFontBold(selectedPart.meta.fontBold);
+        setFontItalic(selectedPart.meta.fontItalic);
+        setFontUnderline(selectedPart.meta.fontUnderline);
+        setFontColor(selectedPart.meta.fontColor);
+
+    }, [selectedPart]);
+
     // on noteId change
     useEffect(() => {
         getNotes();
@@ -172,19 +184,19 @@ function Notes(props) {
                 break;
         }
 
-        if (selectedPart) {
-            setSelectedPart({
-                ...selectedPart,
-                meta: {
-                    fontFamily,
-                    fontSize,
-                    fontBold,
-                    fontItalic,
-                    fontUnderline,
-                    fontColor
+        setNote({
+            ...note,
+            parts: [
+                ...note.parts.filter(part => part != selectedPart),
+                {
+                    ...selectedPart,
+                    meta: {
+                        ...selectedPart.meta,
+                        [type]: value
+                    }
                 }
-            });
-        }
+            ],
+        });
     }
 
     function newNoteButtonPressed() {
@@ -192,18 +204,18 @@ function Notes(props) {
         newNoteNameInputRef.current.style.visibility = "visible";
         newNoteNameInputRef.current.focus();
     }
-    
+
     async function getNotes() {
-        let response = await fetch("http://localhost:8000/notes", {method: "GET"});
+        let response = await fetch("http://localhost:8000/notes", { method: "GET" });
         let json = await response.json();
         setNotes(json);
     }
 
     async function switchToNote(nid) {
-        if(!nid)
+        if (!nid)
             return;
 
-        let response = await fetch("http://localhost:8000/notes/" + nid, {method: "GET"});
+        let response = await fetch("http://localhost:8000/notes/" + nid, { method: "GET" });
         let json = await response.json();
 
         setNote(json);
@@ -242,10 +254,10 @@ function Notes(props) {
     }
 
     async function handleDeleteNote(nid) {
-        if(!nid)
+        if (!nid)
             return;
 
-        let response = await fetch("http://localhost:8000/notes/" + nid, {method: "DELETE"});
+        let response = await fetch("http://localhost:8000/notes/" + nid, { method: "DELETE" });
         let json = await response.json();
 
         props.history.push("/notes/");
@@ -255,7 +267,7 @@ function Notes(props) {
     }
 
     async function handleRenameNote(nid) {
-        if(!nid)
+        if (!nid)
             return;
 
         // Yes, this is stupid. Too bad!
@@ -263,10 +275,10 @@ function Notes(props) {
         btn.setAttribute("contentEditable", "true");
         btn.focus();
 
-        btn.addEventListener('keypress', function(event) {
+        btn.addEventListener('keypress', function (event) {
             if (event.charCode == 13) {
                 event.preventDefault();
-                
+
                 fetch("http://localhost:8000/notes/" + nid, {
                     method: "PATCH",
                     headers: {
@@ -308,7 +320,7 @@ function Notes(props) {
                     ></StyledNewNoteNameInput>
                     {notes.map(note => <StyledNote as={NavLink} to={"/notes/" + note._id} data-noteId={note._id}>
                         {note.name}
-                    <NoteActionsButton noteId={noteId} handleDeleteNote={handleDeleteNote} handleRenameNote={handleRenameNote} />
+                        <NoteActionsButton noteId={noteId} handleDeleteNote={handleDeleteNote} handleRenameNote={handleRenameNote} />
                     </StyledNote>)}
                 </StyledLeftContainer>
                 <StyledDrawArea ref={drawArea} onClick={createTextBloc}>

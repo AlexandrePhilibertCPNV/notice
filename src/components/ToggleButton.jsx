@@ -10,7 +10,7 @@ const StyledToggleButton = styled.button`
     cursor: pointer;
     
     ${props => props.isActive && css`
-        background-color: red;
+        background-color: #ccc;
     `}
 `;
 

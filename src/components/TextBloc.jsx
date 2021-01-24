@@ -9,7 +9,7 @@ const StyledTextBloc = styled.div`
     border: 1px solid #dfdfdf;
 
     ${props => props.isSelected && css`
-        background-color: green;
+        background-color: rgba(150, 150, 150, 0.2);
     `}
 `;
 

@@ -70,6 +70,8 @@ function useDragging({ x = 0, y = 0 }, containerRef, onStoppedDraggingHandler) {
             containerRef.current.removeEventListener("mousemove", onMouseMove);
         }
         return () => {
+            if (!containerRef.current) return;
+
             containerRef.current.removeEventListener("mouseup", onMouseUp);
             containerRef.current.removeEventListener("mousemove", onMouseMove);
         };
